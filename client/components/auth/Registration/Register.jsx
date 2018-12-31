@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
-import './App.css';
-import axios from 'axios';
+import '../../../css/App.css';
+import io from 'socket.io-client';
 
-class Login extends Component {
+class Register extends Component {
     constructor(props) {
         super(props);
         
@@ -12,6 +12,8 @@ class Login extends Component {
             password: ''
         }
         
+        this.socket = io('localhost:8000');
+
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,42 +28,38 @@ class Login extends Component {
     handleSubmit(event){
         event.preventDefault();
 
-        const user = {
+        var user = {
             username: this.state.username,
             password: this.state.password
         };
 
-        axios.post('http://localhost:8000/login', user)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-        })
+        this.socket.emit('register', user);
     }
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div className='NoteEditor'>
+            <form onSubmit={this.handleSubmit} className={this.props.class}>
+                <div className='Form'>
                     <input
                         type='text'
-                        className='NoteEditor__title'
+                        className='Form__input'
                         placeholder='Enter username'
                         value={this.state.username}
                         onChange={this.handleUsernameChange}
                     />
                     <input
                         type='text'
-                        className='NoteEditor__title'
+                        className='Form__input'
                         placeholder='Enter password'
                         value={this.state.password}
                         onChange={this.handlePasswordChange}
                     />
-                    <div className='NoteEditor__footer'>
+                    <div className='Form__footer'>
                         <button
-                            className='NoteEditor__button'
+                            className='Form__button'
                             onClick={this.handleSubmit}
                         >
-                            Login
+                            Sign Up
                         </button>
                     </div>
                 </div>
@@ -70,4 +68,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default Register;
