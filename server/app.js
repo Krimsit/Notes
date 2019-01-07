@@ -14,14 +14,14 @@ var sess;
 
 var app = express();
 
-server = app.listen(serverPort, (err) => {
+var server = app.listen(serverPort, (err) => {
     if (err) return console.log(err);
     else {
         console.log(`Server running at *${serverPort}`);
     }
 });
 
-io = socket(server);
+var io = socket(server);
 
 mongoose.connect(`mongodb://${db.host}:${db.port}/${db.name}`, (err) => {
     if(err) return err;
@@ -57,7 +57,8 @@ io.on('connection', function(socket) {
 			else {
                 console.log('Note Add!')
                 NoteModel.findById(sess, (err, doc) => {
-                    io.emit('notes', doc.notes)       
+                    io.emit('notes', doc.notes)
+                    // console.log(doc.notes);
                 });
 			}
 		})
