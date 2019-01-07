@@ -58,7 +58,6 @@ io.on('connection', function(socket) {
                 console.log('Note Add!')
                 NoteModel.findById(sess, (err, doc) => {
                     io.emit('notes', doc.notes)
-                    // console.log(doc.notes);
                 });
 			}
 		})
